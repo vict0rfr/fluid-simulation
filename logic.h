@@ -14,8 +14,10 @@ public:
 
 	void draw(Graphics &p_graphics);
 	void parseMousePos();
+	void drawGrid(Graphics &p_graphics);
 
 private:
 	float _mouseX = NULL;
 	float _mouseY = NULL;
+	bool _grid[globals::N * globals::N] = { false };
 };
