@@ -3,6 +3,7 @@
 #include "graphics.h"
 #include "input.h"
 #include "globals.h"
+#include "logic.h"
 
 class Fluid {
 public:
@@ -19,4 +20,5 @@ private:
 
 	Graphics _graphics;
 	bool _running;
+	Logic _logic;
 };

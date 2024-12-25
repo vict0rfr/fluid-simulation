@@ -7,8 +7,8 @@
 Graphics::Graphics() {
     SDL_Init(SDL_INIT_VIDEO);
 
-    SDL_CreateWindowAndRenderer("Fluid Simulation", globals::SCREEN_WIDTH, globals::SCREEN_HEIGHT, SDL_WINDOW_RESIZABLE, &this->_window, &this->_renderer);
-    SDL_SetRenderLogicalPresentation(this->_renderer, globals::SCREEN_WIDTH, globals::SCREEN_HEIGHT, SDL_LOGICAL_PRESENTATION_LETTERBOX, SDL_SCALEMODE_NEAREST);
+    SDL_CreateWindowAndRenderer("Fluid Simulation", globals::SCREEN_SIZE, globals::SCREEN_SIZE, SDL_WINDOW_RESIZABLE, &this->_window, &this->_renderer);
+    SDL_SetRenderLogicalPresentation(this->_renderer, globals::SCREEN_SIZE, globals::SCREEN_SIZE, SDL_LOGICAL_PRESENTATION_LETTERBOX, SDL_SCALEMODE_NEAREST);
 
     SDL_IOStream* io = SDL_IOFromMem(logo_ico, logo_ico_len);
 

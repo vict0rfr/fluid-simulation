@@ -137,6 +137,7 @@
     <ClCompile Include="fluid.cpp" />
     <ClCompile Include="graphics.cpp" />
     <ClCompile Include="input.cpp" />
+    <ClCompile Include="logic.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -144,6 +145,7 @@
     <ClInclude Include="globals.h" />
     <ClInclude Include="graphics.h" />
     <ClInclude Include="input.h" />
+    <ClInclude Include="logic.h" />
     <ClInclude Include="logo.h" />
   </ItemGroup>
   <ItemGroup>

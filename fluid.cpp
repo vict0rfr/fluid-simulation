@@ -10,7 +10,6 @@ namespace {
 }
 
 Fluid::Fluid() :
-    _graphics(),
     _running(true)
 {
     this->gameLoop();
@@ -55,19 +54,7 @@ void Fluid::gameLoop() {
 void Fluid::draw(float p_currentFPS, int p_elapsedTime) {
     this->_graphics.clear();
 
-    // Set the draw color to white
-    SDL_SetRenderDrawColor(this->_graphics.getRenderer(), 255, 255, 255, 255);
-
-    // Draw a white pixel at (x, y)
-
-    for (int x = 0; x <= globals::SCREEN_WIDTH; x += globals::SCREEN_WIDTH / 100) { //vertical lines
-        SDL_RenderLine(this->_graphics.getRenderer(), x, 0, x, globals::SCREEN_WIDTH);
-    }
-
-    for (int y = 0; y <= globals::SCREEN_HEIGHT; y += globals::SCREEN_HEIGHT / 100) { //horizontal lines
-        SDL_RenderLine(this->_graphics.getRenderer(), 0, y, globals::SCREEN_HEIGHT, y);
-    }
-
+    this->_logic.draw(this->_graphics);
 
     this->_graphics.flip();
 }
@@ -88,6 +75,9 @@ void Fluid::handleInput(Input &p_input) {
         else if (e.type == SDL_EVENT_QUIT) {
             this->_running = false;
             return;
+        }
+        else if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
+            this->_logic.parseMousePos();
         }
     }
 
