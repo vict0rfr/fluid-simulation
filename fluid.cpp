@@ -2,7 +2,7 @@
 #include <fluid.h>
 
 namespace {
-    const int FPS_TARGET = 60;
+    const int FPS_TARGET = 600;
     constexpr int MAX_FRAME_TIME = 1000 / FPS_TARGET;
 
     unsigned int frameCount = 0;
@@ -65,6 +65,7 @@ void Fluid::update(float p_elapsedTime) {
 
 void Fluid::handleInput(Input &p_input) {
     SDL_Event e;
+    const SDL_MouseButtonEvent &mouse = e.button;
     while (SDL_PollEvent(&e)) {
         if (e.type == SDL_EVENT_KEY_DOWN) {
             p_input.keyDownEvent(e);
@@ -76,8 +77,8 @@ void Fluid::handleInput(Input &p_input) {
             this->_running = false;
             return;
         }
-        else if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
-            this->_logic.parseMousePos();
+        else if (e.type == SDL_EVENT_MOUSE_MOTION && mouse.button == SDL_BUTTON_LEFT || mouse.button == SDL_BUTTON_LEFT) {
+            this->_logic.parseMousePos(mouse.timestamp / 1e+9);
         }
     }
 

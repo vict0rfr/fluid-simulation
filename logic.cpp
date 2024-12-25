@@ -22,25 +22,23 @@ void Logic::draw(Graphics &p_graphics) {
         SDL_RenderLine(p_graphics.getRenderer(), 0, y, globals::SCREEN_SIZE, y);
     }
 
-    this->drawGrid(p_graphics);
+    if (this->_mouseX != NULL && this->_mouseY != NULL) {
+        this->drawGrid(p_graphics);
+    }
 }
 
-void Logic::parseMousePos() {
+void Logic::parseMousePos(float p_dt) {
     SDL_GetMouseState(&this->_mouseX, &this->_mouseY);
+    this->addDensity(p_dt);
 }
 
 void Logic::drawGrid(Graphics &p_graphics) {
-    if (this->_mouseX != NULL && this->_mouseY != NULL) { // aka you clicked. aka parseMousePos was called aka there are positions stored
-        float i = floor(static_cast<int>(this->_mouseX) / globals::GRID_SIZE);
-        float j = floor(static_cast<int>(this->_mouseY) / globals::GRID_SIZE);
-
-        SDL_SetRenderDrawColor(p_graphics.getRenderer(), 255, 0, 0, 255);
-        this->_grid[static_cast<int>(IX(i, j))] = true;
-
+    SDL_SetRenderDrawBlendMode(p_graphics.getRenderer(), SDL_BLENDMODE_BLEND);
         for (int a = 0; a < globals::N * globals::N; a++) {
             if (this->_grid[a]) {
+                SDL_SetRenderDrawColor(p_graphics.getRenderer(), 255, 0, 0, this->_grid[a] * 255);
                 int newJ = floor(a / globals::N); // vertical pos
-                int newI = a - newJ * 40; // horizontal pos
+                int newI = a - newJ * globals::N; // horizontal pos
 
                 SDL_FRect rect;
                 rect.x = newI * globals::GRID_SIZE + 1;
@@ -52,5 +50,20 @@ void Logic::drawGrid(Graphics &p_graphics) {
                 SDL_RenderFillRect(p_graphics.getRenderer(), &rect);
             }
         }
+}
+
+void Logic::update(float p_dt) {
+
+}
+
+void Logic::addDensity(float p_dt) {
+    this->_opacity = p_dt / 2.0f;
+    if (this->_opacity > 1.0f) {
+        this->_opacity = 1.0f;
     }
+
+    float i = floor(static_cast<int>(this->_mouseX) / globals::GRID_SIZE);
+    float j = floor(static_cast<int>(this->_mouseY) / globals::GRID_SIZE);
+
+    this->_grid[static_cast<int>(IX(i, j))] += this->_opacity;
 }

@@ -13,11 +13,14 @@ public:
 	float getMouseY() { return this->_mouseY;  }
 
 	void draw(Graphics &p_graphics);
-	void parseMousePos();
+	void parseMousePos(float p_dt);
 	void drawGrid(Graphics &p_graphics);
+	void update(float p_dt);
+	void addDensity(float p_dt);
 
 private:
 	float _mouseX = NULL;
 	float _mouseY = NULL;
-	bool _grid[globals::N * globals::N] = { false };
+	float _grid[globals::N * globals::N] = { 0.0f };
+	float _opacity = 0.0f;
 };
