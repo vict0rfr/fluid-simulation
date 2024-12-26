@@ -40,7 +40,7 @@ void Fluid::gameLoop() {
         this->update((((static_cast<float>(elapsedTimeMs)) < (MAX_FRAME_TIME)) ? (static_cast<float>(elapsedTimeMs)) : (MAX_FRAME_TIME)));
         lastUpdateTime = currentTimeMs;
 
-        this->draw(currentFPS, static_cast<int>(elapsedTimeMs));
+        this->draw(currentFPS, elapsedTimeMs);
 
         // Frame rate limiting
         Uint64 frameEndTime = SDL_GetTicks();
@@ -51,7 +51,7 @@ void Fluid::gameLoop() {
     }
 }
 
-void Fluid::draw(float p_currentFPS, int p_elapsedTime) {
+void Fluid::draw(Uint64 p_currentFPS, Uint64 p_elapsedTime) {
     this->_graphics.clear();
 
     this->_logic.draw(this->_graphics);
@@ -59,8 +59,10 @@ void Fluid::draw(float p_currentFPS, int p_elapsedTime) {
     this->_graphics.flip();
 }
 
-void Fluid::update(float p_elapsedTime) {
-    //update logic
+void Fluid::update(Uint64 p_elapsedTime) {
+    if (_mouseHeld) {
+        this->_logic.addDensity(p_elapsedTime);
+    }
 }
 
 void Fluid::handleInput(Input &p_input) {
@@ -77,8 +79,27 @@ void Fluid::handleInput(Input &p_input) {
             this->_running = false;
             return;
         }
-        else if (e.type == SDL_EVENT_MOUSE_MOTION && mouse.button == SDL_BUTTON_LEFT || mouse.button == SDL_BUTTON_LEFT) {
-            this->_logic.parseMousePos(mouse.timestamp / 1e+9);
+        /*else if (e.type == SDL_EVENT_MOUSE_MOTION && mouse.button == SDL_BUTTON_LEFT) {
+            this->_logic.parseMousePos();
+            this->_logic.addDensity((mouse.timestamp / 1e+6) - (SDL_GetTicks()));
+        }*/
+        /*else if (mouse.button == SDL_BUTTON_LEFT) {
+            this->_logic.parseMousePos();
+        }*/
+        else if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && mouse.button == SDL_BUTTON_LEFT) {
+            this->_mouseHeld = true;
+            this->_mouseHoldStartTime = SDL_GetTicks();
+        }
+        else if (e.type == SDL_EVENT_MOUSE_BUTTON_UP && mouse.button == SDL_BUTTON_LEFT) {
+            this->_mouseHeld = false;
+        }
+
+        if (this->_mouseHeld) {
+            Uint64 currentTime = SDL_GetTicks();
+            Uint64 dt = currentTime - this->_mouseHoldStartTime;
+            this->_logic.parseMousePos();
+            this->_logic.addDensity(dt);
+            this->_mouseHoldStartTime = currentTime;
         }
     }
 
