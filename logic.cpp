@@ -57,17 +57,18 @@ void Logic::update(Uint64 p_dt) {
 }
 
 void Logic::addDensity(Uint64 p_dt) {
-    std::cout << "Dt(ms): " << p_dt << std::endl;
-    float p = p_dt / 2.0f;
+    float p = p_dt / 1.0f;
 
     if (p > 255.0f) {
         p = 255.0f;
-    }
-
-    std::cout << "Density: " << p << std::endl;
-    
+    }    
     float i = floor(static_cast<int>(this->_mouseX) / globals::GRID_SIZE);
     float j = floor(static_cast<int>(this->_mouseY) / globals::GRID_SIZE);
 
-    this->_densityGrid[static_cast<int>(IX(i, j))] += p;
+    if (this->_densityGrid[static_cast<int>(IX(i, j))] + p > 255) {
+        this->_densityGrid[static_cast<int>(IX(i, j))] = 255;
+    }
+    else {
+        this->_densityGrid[static_cast<int>(IX(i, j))] += p;
+    }
 }
